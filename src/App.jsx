@@ -1,14 +1,20 @@
 // src/App.jsx
 import './App.css'
-import Greeting from './components/Greeting.jsx' // ۱. کامپوننت را وارد کن
+import Greeting from './components/Greeting.jsx'
+import Card from './components/Card.jsx' // ۱. وارد کردن Card
 
 function App() {
   return (
     <>
-      <Greeting name="علی" message="سلام" />
-      <Greeting name="سارا" message="خوش آمدی" />
-      <Greeting name="احمد" message="خوش اومدی جیییگر!"/>
-      <Greeting name="تیم توسعه" message="درود بر" />
+      <Card>
+        <Greeting name="علی" message="سلام" />
+      </Card>
+
+      <Card>
+        <h2>این یک کارت دیگر است</h2>
+        <p>ما می‌توانیم هر محتوای HTML که بخواهیم را اینجا قرار دهیم.</p>
+        <button>یک دکمه</button>
+      </Card>
     </>
   )
 }
