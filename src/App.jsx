@@ -3,6 +3,7 @@ import './App.css'
 import Greeting from './components/Greeting.jsx'
 import Card from './components/Card.jsx' // ۱. وارد کردن Card
 import Counter from './components/Counter.jsx' //اضافه کردن شمارنده
+import InputPreview from './components/Inputpreview.jsx'
 
 function App() {
   return (
@@ -26,6 +27,10 @@ function App() {
         <p>هر کامپوننت State مستقل خودش را دارد.</p>
         <Counter />
       </Card>
+      <card>
+        <h2> مثال پیش نمایش متن زنده</h2>
+        <InputPreview/>
+      </card>
     </>
   )
 }
