@@ -1,38 +1,99 @@
-// src/App.jsx
+import { useState } from "react";
 import './App.css'
-import Greeting from './components/Greeting.jsx'
-import Card from './components/Card.jsx' // ۱. وارد کردن Card
-import Counter from './components/Counter.jsx' //اضافه کردن شمارنده
-import InputPreview from './components/Inputpreview.jsx'
 
-function App() {
-  return (
-    <>
-      <Card>
-        <Greeting name="علی" message="سلام" />
-      </Card>
+// کامپوننت فرزند: یک تسک تنها
+function TodoItem({todo, onToggleComplete,onDelete}){
+  return(
+    <li className={`todo-item ${todo.completed ? 'completed' : ''}`}>
+      <span>{todo.text}</span>
+      <div className="actions">
+        <button className="complete-btn" onClick={onToggleComplete(todo.id)}>✓</button>
+        <button className="delete-btn" onClick={onDelete(todo.id)}>×</button>
 
-      <Card>
-        <h2>این یک کارت دیگر است</h2>
-        <p>ما می‌توانیم هر محتوای HTML که بخواهیم را اینجا قرار دهیم.</p>
-        <button>یک دکمه</button>
-      </Card>
-           <Card>
-        <h2>کامپوننت شمارنده</h2>
-        <p>این کامپوننت حافظه داخلی خودش را دارد.</p>
-        <Counter />
-      </Card>
-            <Card>
-        <h2>یک شمارنده دیگر</h2>
-        <p>هر کامپوننت State مستقل خودش را دارد.</p>
-        <Counter />
-      </Card>
-      <card>
-        <h2> مثال پیش نمایش متن زنده</h2>
-        <InputPreview/>
-      </card>
-    </>
-  )
+      </div>
+    </li>
+  );
+}
+// کامپوننت فرزند: لیست تسک‌ها
+function TodoList({todos, onToggleComplete, onDelete}){
+  return(
+    <ul>
+      {todos.map(
+        <TodoItem
+          key={todo.id}
+          todo={todo}
+          onToggleComplete={onToggleComplete}
+          onDelete={onDelete}
+        />
+      )}
+    </ul>
+  );
+}
+// کامپوننت فرزند: فرم افزودن تسک
+function TodoForm({onAddTask}) {
+  const [text, setText] = useState('');
+
+  const handleSubmit = (e) =>{
+    e.preventDefault();
+    if(text.trim()){
+      onAddTask(text);
+      setText('');
+    }
+  };
+  return(
+    <form onSubmit={handleSubmit}>
+      <input type="text" value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder="یک کار جدید اضافه کن..."
+      />
+      <button type="submit">افزودن</button>
+    </form>
+  );
+}
+// کامپوننت اصلی: والد همه
+function App(){
+  // STATE اصلی برنامه اینجا زندگی می‌کند
+  const [todos,setTodos] = useState([{
+    id: 1,
+    text: 'یادگیری React',
+    completed: true },
+    {
+      id: 2,
+      text: 'ساختن اپلیکیشن Todo List',
+      completed: false 
+    }
+  ]);
+  // تابع برای افزودن تسک
+  const handleAddTask = (text) => {
+    const newTodo = {
+      id: Date.now(),
+      text: text,
+      completed: false,
+    };
+    setTodos([...todos, newTodo]);
+  };
+  // تابع برای حذف تسک
+  const handleDelete = (idtoDelete) =>{
+    setTodos(todos.filter(todo => todo.id !== idtoDelete));
+  };
+  //تابع تکمیل تسک
+  const handleToggleComplete = (idToToggle) => {
+    setTodos(todos.map(todo =>
+      todo.id === idToToggle ? {...todo, completed: !todo.completed} : todo
+
+    ));
+  };
+ return (
+    <div className="app-container">
+      <h1>Todo List با React</h1>
+      <TodoForm onAddTask={handleAddTask} />
+      <TodoList 
+        todos={todos} 
+        onToggleComplete={handleToggleComplete}
+        onDelete={handleDelete}
+      />
+    </div>
+  );
 }
 
-export default App
+export default App;
